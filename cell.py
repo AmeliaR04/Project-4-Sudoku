@@ -1,4 +1,4 @@
-def Cell:
+class Cell:
 
     def __init__(self, value, row, col, screen):
         #Constructor for the Cell class
