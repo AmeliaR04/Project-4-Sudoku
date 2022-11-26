@@ -3,6 +3,7 @@ from cell import Cell
 from board import Board
 import pygame
 from pygame.locals import *
+from os import system
 
 #source: https://www.geeksforgeeks.org/introduction-to-pygame/
 #source: https://www.geeksforgeeks.org/how-to-use-multiple-screens-on-pygame/
@@ -41,41 +42,19 @@ def home_screen():
     screen.blit(text2, mode)
 
 
-class Button:
-    def __init__(self, text, pos, font, bg="black", feedback=""):
-        self.x, self.y = pos
-        self.font = pygame.font.SysFont("calibri", font)
-        if feedback == "":
-            self.feedback = "text"
-        else:
-            self.feedback = feedback
-        self.change_text(text, bg)
-
-    def change_text(self, text, bg="black"):
-        self.text = self.font.render(text, 1, pygame.Color(white))
-        self.size = self.text.get_size()
-        self.surface = pygame.Surface(self.size)
-        self.surface.fill(bg)
-        self.surface.blit(self.text, (0, 0))
-        self.rect = pygame.Rect(self.x, self.y, self.size[0], self.size[1])
-
-    def show(self):
-        screen.blit(button1.surface, (self.x, self.y))
-
-    def click(self, event):
-        x, y = pygame.mouse.get_pos()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if pygame.mouse.get_pressed()[0]:
-                if self.rect.collidepoint(x, y):
-                    self.change_text(self.feedback, 'lightblue')
+def button(screen, position, text):
+    font = pygame.font.SysFont("calibri", 40)
+    text_render = font.render(text, 1, (255, 255, 255))
+    x, y, w , h = text_render.get_rect()
+    x, y = position
+    pygame.draw.line(screen, (150, 150, 150), (x, y), (x + w , y), 5)
+    pygame.draw.line(screen, (150, 150, 150), (x, y - 2), (x, y + h), 5)
+    pygame.draw.line(screen, (50, 50, 50), (x, y + h), (x + w , y + h), 5)
+    pygame.draw.line(screen, (50, 50, 50), (x + w , y+h), [x + w , y], 5)
+    pygame.draw.rect(screen, (255, 128, 0), (x, y, w , h))
+    return screen.blit(text_render, (x, y))
 
 
-
-
-
-button1 = Button("EASY", (100, 400), 30, orange, "START EASY MODE")
-button2 = Button("MEDIUM", (200, 400), 30, orange, "START MEDIUM MODE")
-button3 = Button("HARD", (300, 400), 30, orange, "START HARD MODE")
 
 
 def main():
@@ -85,16 +64,30 @@ def main():
         pygame.display.set_caption('Group_13_Sudoku')
         home_screen()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-            button1.click(event)
+        easy = button(screen, (30, 400), "EASY")
+        medium = button(screen, (160, 400), "MEDIUM")
+        hard = button(screen, (350, 400), "HARD")
+        while True:
+            for event in pygame.event.get():
+                if (event.type == pygame.QUIT):
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
+                    key_to_start = event.key == pygame.K_s or event.key == pygame.K_RIGHT or event.key == pygame.K_UP
+                    if key_to_start:
+                        start()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if easy.collidepoint(pygame.mouse.get_pos()):
+                        screen.fill(grey)
+                    elif medium.collidepoint(pygame.mouse.get_pos()):
+                        screen.fill(grey)
+                    elif hard.collidepoint(pygame.mouse.get_pos()):
+                        screen.fill(grey)
+            pygame.display.update()
+        pygame.quit()
 
-        button1.show()
-        clock.tick(30)
-        pygame.display.update()
 
-        pygame.display.flip()
 
 
 
