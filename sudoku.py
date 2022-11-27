@@ -54,6 +54,17 @@ def button(screen, position, text):
     pygame.draw.rect(screen, (255, 128, 0), (x, y, w , h))
     return screen.blit(text_render, (x, y))
 
+def button_small(screen, position, text):
+    font = pygame.font.SysFont("calibri", 30)
+    text_render = font.render(text, 1, (255, 255, 255))
+    x, y, w , h = text_render.get_rect()
+    x, y = position
+    pygame.draw.line(screen, (150, 150, 150), (x, y), (x + w , y), 5)
+    pygame.draw.line(screen, (150, 150, 150), (x, y - 2), (x, y + h), 5)
+    pygame.draw.line(screen, (50, 50, 50), (x, y + h), (x + w , y + h), 5)
+    pygame.draw.line(screen, (50, 50, 50), (x + w , y+h), [x + w , y], 5)
+    pygame.draw.rect(screen, (255, 128, 0), (x, y, w , h))
+    return screen.blit(text_render, (x, y))
 
 
 
@@ -64,9 +75,10 @@ def main():
         pygame.display.set_caption('Group_13_Sudoku')
         home_screen()
 
-        easy = button(screen, (30, 400), "EASY")
-        medium = button(screen, (160, 400), "MEDIUM")
+        easy = button(screen, (50, 400), "EASY")
+        medium = button(screen, (170, 400), "MEDIUM")
         hard = button(screen, (350, 400), "HARD")
+
         while True:
             for event in pygame.event.get():
                 if (event.type == pygame.QUIT):
@@ -80,10 +92,23 @@ def main():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if easy.collidepoint(pygame.mouse.get_pos()):
                         screen.fill(grey)
+                        reset = button_small(screen, (90, 550), "RESET")
+                        restart = button_small(screen, (210, 550), "RESTART")
+                        exit_ = button_small(screen, (360, 550), "EXIT")
                     elif medium.collidepoint(pygame.mouse.get_pos()):
                         screen.fill(grey)
+                        reset = button_small(screen, (90, 550), "RESET")
+                        restart = button_small(screen, (210, 550), "RESTART")
+                        exit_ = button_small(screen, (360, 550), "EXIT")
                     elif hard.collidepoint(pygame.mouse.get_pos()):
                         screen.fill(grey)
+                        reset = button_small(screen, (90, 550), "RESET")
+                        restart = button_small(screen, (210, 550), "RESTART")
+                        exit_ = button_small(screen, (360, 550), "EXIT")
+
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if exit_.collidepoint(pygame.mouse.get_pos()):
+                            pygame.quit()
             pygame.display.update()
         pygame.quit()
 
